@@ -18,10 +18,10 @@ sigma = 1;%ones(classesCount, attributesCount);
 Q = zeros(samplesCount, actionsCount);%zeros(samplesCount, classesCount, attributesCount, actionsCount);
 
 %reinforcement value for every action
-r = zeros(actionsCount);%zeros(classesCount, attributesCount, actionsCount);
+r = zeros(1, actionsCount);%zeros(classesCount, attributesCount, actionsCount);
 
 %delta for evert action
-delta = zeros(actionsCount);%zeros(classesCount, attributesCount, actionsCount);
+delta = zeros(1, actionsCount);%zeros(classesCount, attributesCount, actionsCount);
 
 %states
 SSE = 0;%zeros(classesCount, attributesCount)
@@ -34,30 +34,31 @@ SSEMin = acc(test, testTarget, sigma, testClassSize);
 
 %spreadIterations
 maxSpread = 10;
-SSEOfSpreads = zeros(maxSpread);
+SSEOfSpreads = zeros(1, maxSpread);
 
 for spread=1:maxSpread
 %     sigma = spread;
     SSEOfSpreads(spread) = acc(test, testTarget, spread, testClassSize);
 end
 
-minSSEofSpreadInd = 1;
-minSSEofSpread = SSEOfSpreads(minSSEofSpreadInd);
+[minVal, minSSEofSpreadInd] = min(SSEOfSpreads);
 
-for i = 1:maxSpread
-    if(SSEOfSpreads(i) < minSSEofSpread)
-        minSSEofSpread = SSEOfSpreads(i);
-        minSSEofSpreadInd = i;
-    end
-end
+% minSSEofSpreadInd = 1;
+% minSSEofSpread = SSEOfSpreads(minSSEofSpreadInd);
+% 
+% for i = 1:maxSpread
+%     if(SSEOfSpreads(i) < minSSEofSpread)
+%         minSSEofSpread = SSEOfSpreads(i);
+%         minSSEofSpreadInd = i;
+%     end
+% end
 
 spreadStart = minSSEofSpreadInd + 1;
 nextBoxSize = getBoxSize(SSEMin, samplesCount);
-spreadCandidates = zeros(maxSteps);
-rCandidates = zeros(maxSteps, actionsCount);
+% spreadCandidates = zeros(1, maxSteps);
+% rCandidates = zeros(maxSteps, actionsCount);
 % boxStart = nextBoxSize;
-step = 1;
-while( step < maxSteps+1)
+for step = 1 : maxSteps+1
 %     box_old = box;
     box = nextBoxSize;
     maxQ = Q(box, 1);
@@ -106,11 +107,10 @@ while( step < maxSteps+1)
        end
     end
     delta(indexOfAction) = r(indexOfAction) + gamma*maxQ-Q(box, indexOfAction);
-    spreadCandidates(step) = sigma;
-    for i=1:actionsCount
-        rCandidates(step, i) = r(i);
-    end
-    step = step + 1;
+%     spreadCandidates(step) = sigma;
+%     for i=1:actionsCount
+%         rCandidates(step, i) = r(i);
+%     end
     Q(box, indexOfAction) = Q(box, indexOfAction) + alpha*delta(indexOfAction);
 end
 end
