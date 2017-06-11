@@ -1,17 +1,18 @@
 clear all;
 
-stepSize = 400;
+stepSize = 500;
 startTime = stepSize*2;
 maxTime = stepSize*2*8;
-spread = 0.01;
+spread = 0.0001;
 
 
-step = 10;
+step = 100;
 
 points = zeros(2, maxTime);
 targets = zeros(1, maxTime);
 results = zeros(1, maxTime);
 errorArray = zeros(2, 0);
+spreadArray = zeros(2, 0);
 
 errorPoints = zeros(2, 0);
 
@@ -46,7 +47,7 @@ net = newpnn(points(:,1:startTime), T, spread);
 for i = 1:step:maxTime-startTime   
     results = vec2ind(net(points(:,i:startTime+i)));
     errorVector = abs(results(1:startTime+1) - targets(i:startTime+i));
-    errorArray = [errorArray, [i; sum(errorVector)/ste]];
+    errorArray = [errorArray, [i; sum(errorVector)*100/step]];
     
     errorPoints = zeros(2, 0);
     for j = i:startTime+i
@@ -55,19 +56,31 @@ for i = 1:step:maxTime-startTime
         end
     end
     
+    spread = calculateSpread(points(i:startTime-step+i),targets(i:startTime-step+i),(startTime-step)/2, points(startTime-step+i+1:startTime+i),targets(startTime-step+1+i:startTime+i),(step)/2);
+    spreadArray = [spreadArray, [i; spread]];
+    
     T = ind2vec(targets(i:startTime+i));
     net = newpnn(points(:,i:startTime+i), T, spread);
 
     
-    subplot(2,1,1);
+    subplot(3,1,1);
     lim = 10;
  
     plot(points(1,i:2:startTime+i), points(2,i:2:startTime+i), 'r*', points(1,i+1:2:startTime+i), points(2,i+1:2:startTime+i), 'g*', errorPoints(1,:), errorPoints(2,:), 'b*');
     xlim([-lim,lim]);
     ylim([-lim,lim]);
     
-    subplot(2,1,2);
+    subplot(3,1,2);
     plot(errorArray(1,:), errorArray(2,:));
+    xlabel('ilosc dodanych punktow')
+    ylabel('procent blednych punktow');
+    
+    subplot(3,1,3);
+    plot(spreadArray(1,:), spreadArray(2,:));
+    xlabel('ilosc dodanych punktow')
+    ylabel('wartosc spread');
+    
+    
     drawnow;
 
 end

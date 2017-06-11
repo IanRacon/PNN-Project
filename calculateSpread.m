@@ -12,7 +12,7 @@ samplesCount = size(test, 2);
 % attributesCount = size(train, 1);
 
 % minimumSpread = 1;%ones(classesCount, attributesCount);
-sigma = 0.01;%ones(classesCount, attributesCount);
+sigma = 0.001;%ones(classesCount, attributesCount);
 
 % action values
 Q = zeros(samplesCount, actionsCount);%zeros(samplesCount, classesCount, attributesCount, actionsCount);
