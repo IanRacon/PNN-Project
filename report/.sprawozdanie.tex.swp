@@ -84,8 +84,64 @@ Wszystkie symulacje zostały przeprowadzone z wykorzystaniem środowiska MATLAB 
 \end{figure}
 Liczbę punktów generowanych w każdym kroku można było zmieniać. Co określoną ilość dodanych punktów sieć neuronowa była uczona nowych danych. Stare punkty były odrzucane wg. 2 metod. Pierwsza metoda polegała na odrzucaniu najstarszych punktów. Punkty były ustawiane w kolejce. Kiedy do kolejki wchodził nowy punkt, najstarszy zostawał z niej usuwany. Długość kolejki mogła być regulowana. Podczas ponownego uczenia sieci, zmianom podlegał parametr wygładzania. Algorytm wyznaczania tegoż parametru został dostarczony przez prowadzącego zajęcia. Podczas symulacji wykonywany był wykres jak w czasie zmienia się procent błędnie sklasyfikowanych punktów oraz mapa, gdzie te punkty się znajdowały. 
 
-Na początku przeprowadzono testy dla stałej wartości spread. Liczbę wszystkich generowanych punktów ustawiono na 8000, natomiast aktualizacja sieci odbywała się co 50 punktów. Rozmiar okna wynosił 
+Na początku przeprowadzono testy dla stałej wartości spread. Liczbę wszystkich generowanych punktów ustawiono na 8000, natomiast aktualizacja sieci odbywała się co 50 punktów. Rozmiar okna wynosił 1000 punktów. Symulacje przeprowadzono dla h równego 0,0001; 0,001; 0,01; 0,1 oraz 1. Dla każdego testu sporządzony został mapa w błędnymi punktami w ostatniej fazie, wykres zależności błędu od czasu oraz średnia wartość błędu. Wartość błędu była ułamkiem wyrażonym w procentach oznaczającym ilość błędnych klasyfikacji w obrębie całego okna na ilość dodanych nowych punktów, zatem wartość ta może przekroczyć 100 \%. Wyniki przedstawia rysunek \ref{test_h}
 
+\begin{figure}[h]
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test_h0_0001.png}
+    \caption{h = 0,0001}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test_h0_001.png}
+    \caption{h = 0,001}
+  \end{subfigure}
+
+   \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test_h0_01.png}
+    \caption{h = 0,01}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test_h0_1.png}
+    \caption{h = 0,1}
+  \end{subfigure}
+  
+  \begin{center}
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test_h1.png}
+    \caption{h = 1}
+  \end{subfigure}
+  \end{center}
+  
+  \caption{Poszczególne etapy generowania danych}
+  \label{test_h}
+  
+\end{figure}
+
+Tabela \ref{h_table} przedstawia średnie wyniki błędów dla poszczególnych wartości spread. 
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+spread & błąd \\
+\hline
+0,0001 & 50\%  \\
+\hline
+0,001 & 45\%  \\
+\hline
+0,01 & 25\%  \\
+\hline
+0,1 & 106\%  \\
+\hline
+1 & 160\%  \\
+\hline
+\end{tabular}
+\caption{Zestawienie wyników testów dla stałych wartości spread.}
+\label{h_table}
+\end{table}
+Następnie przeprowadzono symulację dla h - wartości spread liczonej automatycznie. 
 
 \section{Podsumowanie}
 

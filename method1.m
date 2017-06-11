@@ -3,7 +3,7 @@ clear all;
 stepSize = 500;
 startTime = stepSize*2;
 maxTime = stepSize*2*8;
-spread = 0.01;
+spread = 0.0001;
 
 
 step = 100;
