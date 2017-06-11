@@ -158,5 +158,7 @@ Spoglądając na wyniki dla różnych wartości spread można zauważyć ciekawe
 
 Symulacja z automatycznym liczeniem współczynnika wygładzania działa gorzej niż dla niektórych wartości ustawionych na sztywno. Powodem tego mogło być wadliwe działanie metody Q(0) dla wariantu PNNS. W pewnych warunkach algorytm tracił stabilność i sztucznie zawyżał wartości spread.  
 
+Podsumowując, wiele zależy od danych, które otrzymujemy. Jeśli obie klasy były by wystarczająco oddalone od siebie, poziom błędów byłby dużo mniejszy. Na stworzonym przykładzie poziom błędów nie zmieniał się znacznie w czasie, co dobrze świadczyło o adaptacji sieci neuronowe. W kwestii współczynnika spread można albo ustawić metodami prób i błędów wartość na sztywno i liczyć, że z czasem wartość tego parametru będzie nadal aktualna lub użyć funkcji obliczającej automatycznie ten parametr i mieć pewność, że jakość działania sieci będzie bardziej adaptatywna kosztem większego błędu. 
+
 
 \end{document}
