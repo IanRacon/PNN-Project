@@ -4,7 +4,7 @@ epsilon = 0.005;
 gamma = 0.95;
 alpha = 0.01;
 
-actions = [ -1, -0.1, -0.01, 0.01, 0.1, 1];
+actions = [ -0.01, -0.001, -0.0001, 0.0001, 0.001, 0.01];
 actionsCount = length(actions);
 
 samplesCount = size(test, 2);
@@ -12,7 +12,7 @@ samplesCount = size(test, 2);
 % attributesCount = size(train, 1);
 
 % minimumSpread = 1;%ones(classesCount, attributesCount);
-sigma = 1;%ones(classesCount, attributesCount);
+sigma = 0.01;%ones(classesCount, attributesCount);
 
 % action values
 Q = zeros(samplesCount, actionsCount);%zeros(samplesCount, classesCount, attributesCount, actionsCount);
