@@ -3,7 +3,7 @@ clear all;
 stepSize = 500;
 startTime = stepSize*2;
 maxTime = stepSize*2*8;
-spread = 0.0001;
+spread = 1;
 
 
 step = 100;
@@ -46,7 +46,7 @@ net = newpnn(points(:,1:startTime), T, spread);
 for i = 1:step:maxTime-startTime   
     results = vec2ind(net(points(:,i:startTime+i)));
     errorVector = abs(results(1:startTime+1) - targets(i:startTime+i));
-    errorArray = [errorArray, [i; sum(errorVector)*100/step]];
+    errorArray = [errorArray, [i; sum(errorVector)*100/startTime]];
     
     errorPoints = zeros(2, 0);
     for j = i:startTime+i

@@ -1,12 +1,12 @@
 function [point] = generateClasss2PointSet(iter, stepSize)
- %1 - 100 środek stoi w miejscu
- %101 - 150 przesówamy się o 90 stopni
- %151 - 200 stoimy w miejscu na pozycji 90 stopni
- %201 - 250 idziemy od 90 do 180 stopni
- %251 - 300 stoimy w miejscu na pozycji 180
- %301 - 350 idziemy od 180 do 270 stopni
- %351 - 400 stoimy w miejscu na pozycji 270
- %401 - 450 idziemy od 270 do 360 stopni
+ %1 środek stoi w miejscu
+ %2 przesówamy się o 90 stopni
+ %3 stoimy w miejscu na pozycji 90 stopni
+ %4 idziemy od 90 do 180 stopni
+ %5 stoimy w miejscu na pozycji 180
+ %6 idziemy od 180 do 270 stopni
+ %7 stoimy w miejscu na pozycji 270
+ %8 idziemy od 270 do 360 stopni
  radius = 2;
  point = [0,0];
  
