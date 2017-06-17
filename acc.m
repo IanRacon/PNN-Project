@@ -21,7 +21,7 @@ end
 for i = 1:samplesCount
     classesPropability = zeros(1, classCount);
     for j=1:classCount
-        predictedPropability = yg(classes(j, :, :), samples(:, i), sigma);
+        predictedPropability = yg(classes(j, :, :), samples(:, i), sigma, attribSize);
         classesPropability(j) = predictedPropability;
     end
     [maxVal, maxValInd] = max(classesPropability);

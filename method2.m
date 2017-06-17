@@ -2,19 +2,24 @@ clear all;
 
 stepSize = 500;
 startTime = stepSize*2;
+windowSize = startTime;
 maxTime = stepSize*2*8;
 spread = 0.0001;
 
 
-step = 100;
+step = 1;
 
-points = zeros(2, maxTime);
+% points = zeros(2, maxTime);
+points = zeros(5, maxTime, 2); % 5 point paramters, maxTime samples, 2 classes
 targets = zeros(1, maxTime);
 results = zeros(1, maxTime);
 errorArray = zeros(2, 0);
 spreadArray = zeros(2, 0);
 
 errorPoints = zeros(2, 0);
+
+class1Points = zeros(5, windowSize);
+class2Points = zeros(5, windowSize);
 
 for i = 1:maxTime;
     if mod(i,2) == 0;
@@ -27,7 +32,18 @@ for i = 1:maxTime;
         results(i) = 2;
     end
 end
+for i = 1:windowSize;
+    if mod(i,2) == 0;
+        class2Points(:, i) = points(:, i);
+    else
+        class1Points(:, i) = points(:, i);
+    end
+end
 
+setsOfPoints = zeros(5, windowSize, 2);
+
+setsOfPoints(:, :, 1) = class1Points;
+setsOfPoints(:, :, 2) = class2Points;
 %generowanie obrazków demonstrujących dane wejściowe 
 
 % for endTime = 200:200:maxTime;
@@ -41,11 +57,14 @@ end
 % end
 
 figure('visible','on');
-T = ind2vec(targets(1:startTime));
-net = newpnn(points(:,1:startTime), T, spread);
+% T = ind2vec(targets(1:startTime));
+% net = newpnn(points(:,1:startTime), T, spread);
 
-for i = 1:step:maxTime-startTime   
-    results = vec2ind(net(points(:,i:startTime+i)));
+for i = startTime:step:maxTime
+    considerPoint(setsOfPoints, points(:, i));
+    
+    
+%     results = vec2ind(net(points(:,i:startTime+i)));
     errorVector = abs(results(1:startTime+1) - targets(i:startTime+i));
     errorArray = [errorArray, [i; sum(errorVector)*100/step]];
     
@@ -56,8 +75,8 @@ for i = 1:step:maxTime-startTime
         end
     end
     
-    spread = calculateSpread(points(i:startTime-step+i),targets(i:startTime-step+i),(startTime-step)/2, points(startTime-step+i+1:startTime+i),targets(startTime-step+1+i:startTime+i),(step)/2);
-    spreadArray = [spreadArray, [i; spread]];
+%     spread = calculateSpread(points(i:startTime-step+i),targets(i:startTime-step+i),(startTime-step)/2, points(startTime-step+i+1:startTime+i),targets(startTime-step+1+i:startTime+i),(step)/2);
+%     spreadArray = [spreadArray, [i; spread]];
     
     T = ind2vec(targets(i:startTime+i));
     net = newpnn(points(:,i:startTime+i), T, spread);

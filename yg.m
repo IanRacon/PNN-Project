@@ -1,8 +1,8 @@
-function [ propability ] = yg( samples, x, sigma )
+function [ propability ] = yg( samples, x, sigma, attributesQuantity )
 %returns propability that sample "x" belong to class given in "samples"
 %"samples" means data only from one class
 samplesCount = size(samples, 2);
-attributesCount = size(samples, 1);
+attributesCount = attributesQuantity;
 
 lg = samplesCount;
 n = attributesCount;
