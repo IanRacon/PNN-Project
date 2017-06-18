@@ -1,24 +1,21 @@
-clear all;
+function [  ] = method2()
 
-stepSize = 500;
+stepSize = 200;
 startTime = stepSize*2;
-windowSize = 100;
+windowSize = 200;
 maxTime = stepSize*2*8;
 spread = 0.0001;
 
-global pointAttribsCount;
-global serialNumber;
-global lifeTimeIndex;
-global serialNumberIndex;
-global classOfPointIndex;
-global logsEnabled;
+globals;
 
 pointAttribsCount = 8;
+penaltyIndex = 7;
+propabilityIndex = 6;
 lifeTimeIndex = 5;
 classOfPointIndex = 4;
 serialNumberIndex = 3;
 serialNumber = 1;
-logsEnabled = false;
+logsEnabled = true;
 
 step = 1;
 
@@ -26,7 +23,7 @@ step = 1;
 
 % zeros(point paramters, samplesCount, classesCount)
 % point parameters are following [position x, position y, serialNumber, class, lifeTime, propability, penalty, score]
-realPoints = zeros(pointAttribsCount, maxTime, 2); 
+realPoints = zeros(pointAttribsCount, maxTime); 
 
 targets = zeros(1, maxTime);
 results = zeros(1, maxTime);
@@ -35,20 +32,20 @@ spreadArray = zeros(2, 0);
 
 errorPoints = zeros(2, 0);
 
-class1Points = zeros(pointAttribsCount, windowSize);
-class2Points = zeros(pointAttribsCount, windowSize);
+class1Points = zeros(pointAttribsCount, windowSize/2);
+class2Points = zeros(pointAttribsCount, windowSize/2);
 
 for i = 1:maxTime;
     if mod(i,2) == 0;
         realPoints(:,i) = generateClasss2PointSet(i/2, stepSize)';
-        realPoints(classOfPointIndex,i) = 1;
+        realPoints(classOfPointIndex,i) = 2;
         realPoints(serialNumberIndex,i) = serialNumber;
         serialNumber = serialNumber + 1;
         targets(i) = 1;
         results(i) = 1;
     else
         realPoints(:,i) = generateClasss1PointSet((i+1)/2, stepSize)';
-        realPoints(classOfPointIndex,i) = 2;
+        realPoints(classOfPointIndex,i) = 1;
         realPoints(serialNumberIndex,i) = serialNumber;
         serialNumber = serialNumber + 1;
         targets(i) = 2;
@@ -67,7 +64,7 @@ for i = 1:windowSize;
     end
 end
 
-setsOfPoints = zeros(pointAttribsCount, windowSize, 2);
+setsOfPoints = zeros(pointAttribsCount, windowSize/2, 2);
 
 setsOfPoints(:, :, 1) = class1Points;
 setsOfPoints(:, :, 2) = class2Points;
@@ -90,13 +87,15 @@ figure('visible','on');
 for i = startTime:step:maxTime
     setsOfPoints = considerPoint(setsOfPoints, realPoints(:, i));
     
-%     errorPoints = getErrorPoints( setsOfPoints, realPoints);
+%     errorPoints = getErrorPoints(setsOfPoints, realPoints);
+    errors = getErrorPoints(setsOfPoints, realPoints);
     
 %     results = net(realPoints(:,i:startTime+i));
     
 %     results = vec2ind(net(points(:,i:startTime+i)));
 %     errorVector = abs(results(1:startTime+1) - targets(i:startTime+i));
 %     errorArray = [errorArray, [i; sum(errorVector)*100/step]];
+    errorArray = [errorArray, [i;errors/(size(setsOfPoints, 2)*2)*100]];
 %     
 %     errorPoints = zeros(2, 0);
 %     for j = i:startTime+i
@@ -112,7 +111,7 @@ for i = startTime:step:maxTime
 %     net = newpnn(realPoints(:,i:startTime+i), T, spread);
 
     
-%     subplot(3,1,1);
+    subplot(3,1,1);
     lim = 10;
     if(i+windowSize > maxTime)
         visibilityRange = maxTime;
@@ -130,10 +129,10 @@ for i = startTime:step:maxTime
     xlim([-lim,lim]);
     ylim([-lim,lim]);
     
-%     subplot(3,1,2);
-%     plot(errorArray(1,:), errorArray(2,:));
-%     xlabel('ilosc dodanych punktow')
-%     ylabel('procent blednych punktow');
+    subplot(2,1,2);
+    plot(errorArray(1,:), errorArray(2,:));
+    xlabel('ilosc dodanych punktow')
+    ylabel('procent blednych punktow');
 %     
 %     subplot(3,1,3);
 %     plot(spreadArray(1,:), spreadArray(2,:));
@@ -142,9 +141,9 @@ for i = startTime:step:maxTime
 %     
 %     
     drawnow;
-
 end
-
+clf
 mean(errorArray(2,:))
+end
 
 
