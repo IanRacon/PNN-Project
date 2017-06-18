@@ -1,4 +1,4 @@
-function [ points ] = evaluate( points, newPoint, sigma)
+function [ points ] = evaluateNewPoint( points, newPoint, sigma)
 %points should be a matrix of the form:
 %[pointsParams, pointsQuantity]
 %where one point (one column) is a vector

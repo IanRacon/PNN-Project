@@ -2,15 +2,32 @@ clear all;
 
 stepSize = 500;
 startTime = stepSize*2;
-windowSize = startTime;
+windowSize = 100;
 maxTime = stepSize*2*8;
 spread = 0.0001;
 
+global pointAttribsCount;
+global serialNumber;
+global lifeTimeIndex;
+global serialNumberIndex;
+global classOfPointIndex;
+global logsEnabled;
+
+pointAttribsCount = 8;
+lifeTimeIndex = 5;
+classOfPointIndex = 4;
+serialNumberIndex = 3;
+serialNumber = 1;
+logsEnabled = false;
 
 step = 1;
 
 % points = zeros(2, maxTime);
-points = zeros(5, maxTime, 2); % 5 point paramters, maxTime samples, 2 classes
+
+% zeros(point paramters, samplesCount, classesCount)
+% point parameters are following [position x, position y, serialNumber, class, lifeTime, propability, penalty, score]
+realPoints = zeros(pointAttribsCount, maxTime, 2); 
+
 targets = zeros(1, maxTime);
 results = zeros(1, maxTime);
 errorArray = zeros(2, 0);
@@ -18,29 +35,39 @@ spreadArray = zeros(2, 0);
 
 errorPoints = zeros(2, 0);
 
-class1Points = zeros(5, windowSize);
-class2Points = zeros(5, windowSize);
+class1Points = zeros(pointAttribsCount, windowSize);
+class2Points = zeros(pointAttribsCount, windowSize);
 
 for i = 1:maxTime;
     if mod(i,2) == 0;
-        points(:,i) = generateClasss2PointSet(i/2, stepSize)';
+        realPoints(:,i) = generateClasss2PointSet(i/2, stepSize)';
+        realPoints(classOfPointIndex,i) = 1;
+        realPoints(serialNumberIndex,i) = serialNumber;
+        serialNumber = serialNumber + 1;
         targets(i) = 1;
         results(i) = 1;
     else
-        points(:,i) = generateClasss1PointSet((i+1)/2, stepSize)';
+        realPoints(:,i) = generateClasss1PointSet((i+1)/2, stepSize)';
+        realPoints(classOfPointIndex,i) = 2;
+        realPoints(serialNumberIndex,i) = serialNumber;
+        serialNumber = serialNumber + 1;
         targets(i) = 2;
         results(i) = 2;
     end
 end
+itClass1 = 1;
+itClass2 = 1;
 for i = 1:windowSize;
     if mod(i,2) == 0;
-        class2Points(:, i) = points(:, i);
+        class2Points(:, itClass2) = realPoints(:, i);
+        itClass2 = itClass2 + 1;
     else
-        class1Points(:, i) = points(:, i);
+        class1Points(:, itClass1) = realPoints(:, i);
+        itClass1 = itClass1 + 1;
     end
 end
 
-setsOfPoints = zeros(5, windowSize, 2);
+setsOfPoints = zeros(pointAttribsCount, windowSize, 2);
 
 setsOfPoints(:, :, 1) = class1Points;
 setsOfPoints(:, :, 2) = class2Points;
@@ -61,45 +88,59 @@ figure('visible','on');
 % net = newpnn(points(:,1:startTime), T, spread);
 
 for i = startTime:step:maxTime
-    considerPoint(setsOfPoints, points(:, i));
+    setsOfPoints = considerPoint(setsOfPoints, realPoints(:, i));
     
+%     errorPoints = getErrorPoints( setsOfPoints, realPoints);
+    
+%     results = net(realPoints(:,i:startTime+i));
     
 %     results = vec2ind(net(points(:,i:startTime+i)));
-    errorVector = abs(results(1:startTime+1) - targets(i:startTime+i));
-    errorArray = [errorArray, [i; sum(errorVector)*100/step]];
-    
-    errorPoints = zeros(2, 0);
-    for j = i:startTime+i
-        if results(j-i+1) ~= targets(j)
-            errorPoints = [errorPoints, points(:,j)];
-        end
-    end
+%     errorVector = abs(results(1:startTime+1) - targets(i:startTime+i));
+%     errorArray = [errorArray, [i; sum(errorVector)*100/step]];
+%     
+%     errorPoints = zeros(2, 0);
+%     for j = i:startTime+i
+%         if results(j-i+1) ~= targets(j)
+%             errorPoints = [errorPoints, realPoints(:,j)];
+%         end
+%     end
     
 %     spread = calculateSpread(points(i:startTime-step+i),targets(i:startTime-step+i),(startTime-step)/2, points(startTime-step+i+1:startTime+i),targets(startTime-step+1+i:startTime+i),(step)/2);
 %     spreadArray = [spreadArray, [i; spread]];
     
-    T = ind2vec(targets(i:startTime+i));
-    net = newpnn(points(:,i:startTime+i), T, spread);
+%     T = ind2vec(targets(i:startTime+i));
+%     net = newpnn(realPoints(:,i:startTime+i), T, spread);
 
     
-    subplot(3,1,1);
+%     subplot(3,1,1);
     lim = 10;
- 
-    plot(points(1,i:2:startTime+i), points(2,i:2:startTime+i), 'r*', points(1,i+1:2:startTime+i), points(2,i+1:2:startTime+i), 'g*', errorPoints(1,:), errorPoints(2,:), 'b*');
+    if(i+windowSize > maxTime)
+        visibilityRange = maxTime;
+    else
+        visibilityRange = i+windowSize;
+    end
+    
+%     plot(realPoints(1,i:2:startTime+i), realPoints(2,i:2:startTime+i), 'r*', realPoints(1,i+1:2:startTime+i), realPoints(2,i+1:2:startTime+i), 'g*', errorPoints(1,:), errorPoints(2,:), 'b*');
+    plot(realPoints(1,1:maxTime), realPoints(2,1:maxTime), 'k*', ...
+         realPoints(1, i:visibilityRange), realPoints(2, i:visibilityRange), 'g*', ...
+         errorPoints(1,:), errorPoints(2,:), 'r*', ...
+         setsOfPoints(1, :, 1), setsOfPoints(2, :, 1), 'm+', ... 
+         setsOfPoints(1, :, 2), setsOfPoints(2, :, 2), 'yo');
+    
     xlim([-lim,lim]);
     ylim([-lim,lim]);
     
-    subplot(3,1,2);
-    plot(errorArray(1,:), errorArray(2,:));
-    xlabel('ilosc dodanych punktow')
-    ylabel('procent blednych punktow');
-    
-    subplot(3,1,3);
-    plot(spreadArray(1,:), spreadArray(2,:));
-    xlabel('ilosc dodanych punktow')
-    ylabel('wartosc spread');
-    
-    
+%     subplot(3,1,2);
+%     plot(errorArray(1,:), errorArray(2,:));
+%     xlabel('ilosc dodanych punktow')
+%     ylabel('procent blednych punktow');
+%     
+%     subplot(3,1,3);
+%     plot(spreadArray(1,:), spreadArray(2,:));
+%     xlabel('ilosc dodanych punktow')
+%     ylabel('wartosc spread');
+%     
+%     
     drawnow;
 
 end
