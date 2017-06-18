@@ -1,7 +1,7 @@
-function [ classIndex, maxValue, penalty ] = classifyPoint( setsOfPoints, newPoint, sigma )
+function [ classIndex, propability, penalty ] = classifyPoint( setsOfPoints, newPoint, sigma )
 %setsOfPoints is a matrix where third dimension defines class
 
-global logsEnabled;
+globals;
 
 attributesQuantity = 2;
 numOfClasses = size(setsOfPoints, 3);
@@ -19,12 +19,16 @@ for i = 1:numOfClasses
     propabilities = [propabilities, pointPropability];
 end
 
-[maxValue, classIndex] = max(propabilities);
-penalty = sum(propabilities) - maxValue;
+[propability, classIndex] = max(propabilities);
+penalty = sum(propabilities) - propability;
+
+if(newPoint(classOfPointIndex) ~= classIndex)
+    fprintf('Bad classification \n');
+end
 
 if(logsEnabled)
-    fprintf('New point at x:%f, y:%f should go to class with index:%d with propability:%f \n', ...
-    newPoint(1), newPoint(2), classIndex, maxValue);
+    fprintf('New point at x:%f, y:%f, class:%f had propabilities to classes: 1: %f, 2: %f should go to class with index:%d with propability:%f and penalty %f \n', ...
+    newPoint(1), newPoint(2),newPoint(classOfPointIndex) ,propabilities(1),propabilities(2), classIndex, propability, penalty);
 end
 
 end

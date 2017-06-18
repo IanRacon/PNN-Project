@@ -5,6 +5,8 @@ function [ points ] = evaluateNewPoint( points, newPoint, sigma)
 %[position x, position y, lifeTime, propability, penalty, score]
 global lifeTimeIndex;
 global logsEnabled;
+global serialNumberIndex;
+global classOfPointIndex;
 
 points = [points , newPoint];
 pointsQuantity = size(points, 2);
@@ -18,8 +20,8 @@ end
 [score, index] = min(points(8, :));
 
 if(logsEnabled)
-    fprintf('Erasing worst point at index %d, with score value:%f, lifeTime:%d, propabilityValue:%f, penaltyVlaue:%f', ...
-    index, score, points(lifeTimeIndex, index), points(6, index), points(7, index));
+    fprintf('Erasing worst point at serial %d, class: %d with score value:%f, lifeTime:%d, propabilityValue:%f, penaltyVlaue:%f \n', ...
+    points(serialNumberIndex, index), points(classOfPointIndex, index), score, points(lifeTimeIndex, index), points(6, index), points(7, index));
 end
 
 points(:, index) = [];
