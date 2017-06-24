@@ -22,9 +22,9 @@ end
 [propability, classIndex] = max(propabilities);
 penalty = sum(propabilities) - propability;
 
-if(newPoint(classOfPointIndex) ~= classIndex)
-    fprintf('Bad classification \n');
-end
+% if(newPoint(classOfPointIndex) ~= classIndex)
+%     fprintf('Bad classification \n');
+% end
 
 if(logsEnabled)
     fprintf('New point at x:%f, y:%f, class:%f had propabilities to classes: 1: %f, 2: %f should go to class with index:%d with propability:%f and penalty %f \n', ...

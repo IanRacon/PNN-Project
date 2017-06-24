@@ -1,4 +1,4 @@
-function [ errors ] = getErrorPoints( setsOfAcutalHoldedPoints, realPoints )
+function [ errors ] = getErrorPoints( setsOfAcutalHoldedPoints )
 classesCount = size(setsOfAcutalHoldedPoints, 3);
 classSamplesCount = size(setsOfAcutalHoldedPoints, 2);
 % samplesCount = size(realPoints, 2);

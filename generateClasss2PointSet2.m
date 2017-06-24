@@ -16,8 +16,9 @@ function [point] = generateClasss2PointSet2(iter, stepSize)
  %15 stoimy w miejscu na pozycji 270
  %16 idziemy od 270 do 360 stopni względem (-2,0)
  radius = 2;
- point = [0,0];
- 
+%  point = [0,0];
+ global pointAttribsCount;
+point = zeros(pointAttribsCount,1); 
  
  %pierwsze koło
  if 1 <= iter && iter <= stepSize

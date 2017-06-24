@@ -1,5 +1,16 @@
 clear all;
 
+globals;
+pointAttribsCount = 8;
+penaltyIndex = 7;
+propabilityIndex = 6;
+lifeTimeIndex = 5;
+classOfPointIndex = 4;
+serialNumberIndex = 3;
+serialNumber = 1;
+logsEnabled = false;
+
+
 stepSize = 500;
 startTime = stepSize*2;
 maxTime = stepSize*2*8;
@@ -8,7 +19,7 @@ spread = 1;
 
 step = 100;
 
-points = zeros(2, maxTime);
+points = zeros(8, maxTime);
 targets = zeros(1, maxTime);
 results = zeros(1, maxTime);
 errorArray = zeros(2, 0);
@@ -21,7 +32,7 @@ for i = 1:maxTime;
         targets(i) = 1;
         results(i) = 1;
     else
-        points(:,i) = generateClasss1PointSet((i+1)/2, stepSize)';
+        points(:,i) = generateClasss1PointSet((i+1)/2, stepSize)'; 
         targets(i) = 2;
         results(i) = 2;
     end
