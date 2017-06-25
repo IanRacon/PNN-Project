@@ -1,11 +1,8 @@
-function [  ] = method2()
-
 stepSize = 200;
 startTime = stepSize*2;
 windowSize = 50;
-% maxTime = stepSize*2*8;
-maxTime = stepSize*2*17;
-spread = 0.0001;
+maxTime = stepSize*2*9;
+spread = 0.1;
 
 globals;
 
@@ -61,23 +58,17 @@ class3Points = zeros(pointAttribsCount, windowSize);
 % end
 
 for i = 1:maxTime;
-    if mod(i,3) == 0;
-        realPoints(:,i) = generateClasss2PointSet2(i/2, stepSize)';
+    if mod(i,2) == 0;
+        realPoints(:,i) = generateClasss2PointSet(i/2, stepSize)';
         realPoints(classOfPointIndex,i) = 2;
         realPoints(serialNumberIndex,i) = serialNumber;
         serialNumber = serialNumber + 1;
 %         targets(i) = 1;
 %         results(i) = 1;
-    elseif mod(i, 3) == 1;
-        realPoints(:,i) = generateRandomPoint(-2,0);
+    elseif mod(i, 2) == 1;
+        realPoints(:,i) = generateRandomPoint(0,0);
 %         realPoints(:,i) = generateClasss1PointSet2((i+1)/2, stepSize)';
         realPoints(classOfPointIndex,i) = 1;
-        realPoints(serialNumberIndex,i) = serialNumber;
-        serialNumber = serialNumber + 1;
-    else
-        realPoints(:,i) = generateRandomPoint(2,0);
-%         realPoints(:,i) = generateClasss1PointSet2((i+1)/2, stepSize)';
-        realPoints(classOfPointIndex,i) = 3;
         realPoints(serialNumberIndex,i) = serialNumber;
         serialNumber = serialNumber + 1;
     end
@@ -86,17 +77,14 @@ end
 
 itClass1 = 1;
 itClass2 = 1;
-itClass3 = 1;
+
 for i = 1:numOfClasses*windowSize;
-    if mod(i,3) == 0;
+    if mod(i,2) == 0;
         class2Points(:, itClass2) = realPoints(:, i);
         itClass2 = itClass2 + 1;
-    elseif mod(i, 3) == 1;
+    elseif mod(i, 2) == 1;
         class1Points(:, itClass1) = realPoints(:, i);
         itClass1 = itClass1 + 1;
-    elseif mod(i, 3) == 2;
-        class3Points(:, itClass3) = realPoints(:, i);
-        itClass3 = itClass3 + 1;
     end
 end
 
@@ -104,7 +92,7 @@ setsOfPoints = zeros(pointAttribsCount, windowSize, numOfClasses);
 
 setsOfPoints(:, :, 1) = class1Points;
 setsOfPoints(:, :, 2) = class2Points;
-setsOfPoints(:, :, 3) = class3Points;
+
 %generowanie obrazków demonstrujących dane wejściowe 
 
 % for endTime = 200:200:maxTime;
@@ -126,7 +114,7 @@ it = 1;
 errorArray = [];
 setsOfPoints(:, :, 1) = class1Points;
 setsOfPoints(:, :, 2) = class2Points;
-setsOfPoints(:, :, 3) = class3Points;
+
 for k = startTime:step:maxTime
     errors = 0;
         for j = 1:step
@@ -150,8 +138,7 @@ for k = startTime:step:maxTime
             plot(realPoints(1, i:visibilityRange), realPoints(2, i:visibilityRange), 'g*', ...
                  errorPoints(1,:), errorPoints(2,:), 'r*', ...
                  setsOfPoints(1, :, 1), setsOfPoints(2, :, 1), 'm+', ... 
-                 setsOfPoints(1, :, 2), setsOfPoints(2, :, 2), 'yo', ...
-                setsOfPoints(1, :, 3), setsOfPoints(2, :, 3), 'mo');
+                 setsOfPoints(1, :, 2), setsOfPoints(2, :, 2), 'yo');
 
             xlim([-lim,lim]);
             ylim([-lim,lim]);
@@ -201,6 +188,6 @@ end
 % ylabel('Parametr prawdopodobieństwa');
 % xlabel('');
 % print(fig, strcat('propability'), '-dpng');
-end
+
 
 

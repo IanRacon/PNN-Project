@@ -13,7 +13,7 @@ logsEnabled = false;
 
 stepSize = 500;
 startTime = stepSize*2;
-maxTime = stepSize*2*8;
+maxTime = stepSize*2*17;
 spread = 1;
 
 
@@ -28,11 +28,11 @@ errorPoints = zeros(2, 0);
 
 for i = 1:maxTime;
     if mod(i,2) == 0;
-        points(:,i) = generateClasss2PointSet(i/2, stepSize)';
+        points(:,i) = generateClasss2PointSet2(i/2, stepSize)';
         targets(i) = 1;
         results(i) = 1;
     else
-        points(:,i) = generateClasss1PointSet((i+1)/2, stepSize)'; 
+        points(:,i) = generateClasss1PointSet2((i+1)/2, stepSize)'; 
         targets(i) = 2;
         results(i) = 2;
     end
@@ -54,26 +54,26 @@ figure('visible','on');
 T = ind2vec(targets(1:startTime));
 net = newpnn(points(:,1:startTime), T, spread);
 
-for i = 1:step:maxTime-startTime   
-    results = vec2ind(net(points(:,i:startTime+i)));
-    errorVector = abs(results(1:startTime+1) - targets(i:startTime+i));
-    errorArray = [errorArray, [i; sum(errorVector)*100/startTime]];
+for i = 1:step:maxTime-step   
+    results = vec2ind(net(points(:,i:step+i)));
+    errorVector = abs(results(1:step+1) - targets(i:step+i));
+    errorArray = [errorArray, [i; sum(errorVector)*100/step]];
     
-    errorPoints = zeros(2, 0);
-    for j = i:startTime+i
+    errorPoints = zeros(8, 0);
+    for j = i:step+i
         if results(j-i+1) ~= targets(j)
             errorPoints = [errorPoints, points(:,j)];
         end
     end
     
-    T = ind2vec(targets(i:startTime+i));
-    net = newpnn(points(:,i:startTime+i), T, spread);
+    T = ind2vec(targets(i:step+i));
+    net = newpnn(points(:,i:step+i), T, spread);
 
     
     subplot(2,1,1);
     lim = 10;
  
-    plot(points(1,i:2:startTime+i), points(2,i:2:startTime+i), 'r*', points(1,i+1:2:startTime+i), points(2,i+1:2:startTime+i), 'g*', errorPoints(1,:), errorPoints(2,:), 'b*');
+    plot(points(1,i:2:step+i), points(2,i:2:step+i), 'r*', points(1,i+1:2:step+i), points(2,i+1:2:step+i), 'g*', errorPoints(1,:), errorPoints(2,:), 'b*');
     xlim([-lim,lim]);
     ylim([-lim,lim]);
     

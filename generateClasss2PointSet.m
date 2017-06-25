@@ -32,6 +32,8 @@ point = zeros(pointAttribsCount,1);
  elseif stepSize*7+1 <= iter && iter < stepSize*8
      angle = 3.1415*3/2 + (3.1415/2)*(iter-stepSize*7+1)/stepSize;
      point = getClass2Points(radius, angle, 0, 0); 
+ elseif stepSize*8+1 <= iter && iter < stepSize*9
+     point = getClass2Points(radius, 0, 0, 0);
  end
 end
 
