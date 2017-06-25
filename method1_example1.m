@@ -14,7 +14,7 @@ logsEnabled = false;
 stepSize = 2000;
 startTime = stepSize*2;
 maxTime = stepSize*2*9;
-spread = 1;
+spread = 0.001;
 
 
 step = 200;

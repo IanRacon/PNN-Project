@@ -14,10 +14,10 @@ logsEnabled = false;
 stepSize = 500;
 startTime = stepSize*2;
 maxTime = stepSize*2*17;
-spread = 1;
+spread = 20;
 
 
-step = 100;
+step = 200;
 
 points = zeros(8, maxTime);
 targets = zeros(1, maxTime);
