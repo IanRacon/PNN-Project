@@ -284,7 +284,17 @@ spread & błąd \\
 
 %%----------------------------METODA_PRIORYTETÓW
 \subsection{Metoda priorytetów}
-Analogiczne testy przeprowadzono dla metody priorytetowej. Polegała ona na tym, że punkty służące do uczenia sieci w kolejnych krokach były trzymane w buforze o stałej wielkości. Kiedy przychodził nowy punkt, liczony był jego priorytet na podstawie prawdopodobieństwa przynależności do danej klasy oraz jego wieku. Dla punktów w buforze aktualizowano wartość priorytetu, ponieważ punkty w buforze się starzały. Nowy punkt był dodawany do bufora. Następnie odbywało się sortowanie wg priorytetu i usuwany był punkt z najniższą jego wartością. 
+Analogiczne testy przeprowadzono dla metody priorytetowej. Polegała ona na tym, że punkty służące do uczenia sieci w kolejnych krokach były trzymane w buforze o stałej wielkości. Kiedy przychodził nowy punkt, liczony był jego priorytet na podstawie prawdopodobieństwa przynależności do danej klasy oraz jego wieku. Dla punktów w buforze aktualizowano wartość priorytetu, ponieważ punkty w buforze się starzały. Nowy punkt był dodawany do bufora. Następnie odbywało się sortowanie wg priorytetu i usuwany był punkt z najniższą jego wartością. Priorytet punktów był liczony głównie w funkcji \textit{comptScore} oraz jego przyczynki częściowo w innych częściach programu, według następującego wzoru:
+\begin{gather}
+	\alpha(x_{i}^{(g)}) = \frac{t_{max} - t(x_i)}{2t_{max}} + \eta y^{(g)}(x_i) - \gamma \Bigg( \sum_{k=1}^K\Big(y^{(k)}(x_i)\Big) -y^{(g)}(x_i) \Bigg),
+\end{gather}
+gdzie $\alpha(x_{i}^{(g)})$ oznacza priorytet i-tego punktu z klasy g, $t_{max}$ maksymalny wiek punktu (powyżej maksymalnego wieku, punkt zaczyna otrzymywać karę za wiek), $t(x_i)$ - wiek  punktu, K - liczba klas, $y^{(k)}$ prawdopodobienstwo przynaleznosci do k-tej klasy, $\eta$ oraz $\gamma$ - współczynniki. W powyższym wzorze $y^{(g)}(x)$ liczone jest jako:
+
+
+\begin{gather}
+	y^{(g)}(x) = \frac{1}{l_g(2\pi)^{n/2}\sigma^n}  \sum_{j=1}^{l_g}exp\Bigg(-\sum_{j=1}^n\frac{(x_{ij}^{(g)} - x_j)^2}{2\sigma^2} \Bigg),
+\end{gather}
+gdzie $l_g$ oznacza liczbę punktów klasy g, $n$ liczbę atrybutów klasy (w przypadku punktów współrzędne x i y), $\sigma$ parametr $spread$, $x_{ij}^{(g)}$ oznacza j-ty atrybut i-tej punktu z klasy g. 
 Dla obu zestawów przeprowadzono symulacje dla h równego 0,001, 0,01; 0,1; 1, 10 i 100. W drugim zestawie wprowadzono modyfikację polegającą na rozbiciu klasy stacjonarnej na dwie klasy (o centrach w pkt. (-2,0) i (2,0). Szerokość okna wynosiła 50. Wyniki dla zestawu pierwszego przedstawia rysunek \ref{test_h3} oraz tabela \ref{h_table3}.
 
 \begin{figure}[H]
