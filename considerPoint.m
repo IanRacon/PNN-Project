@@ -4,7 +4,7 @@ function [ setsOfPoints, mismatch ] = considerPoint( setsOfPoints, newPoint, p_t
 globals;
 mismatch = 0;
 
-sigma = 1;
+sigma = 0.001;
 for i = 1:size(setsOfPoints, 3)
    setsOfPoints(:, :, i) = increaseTime(setsOfPoints(:, :, i));
 end

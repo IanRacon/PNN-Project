@@ -132,7 +132,10 @@ Drugi zestaw składał się również z dwóch dwu wymiarowych klas. Pierwsza kl
   
 \end{figure}
 
-Liczbę punktów generowanych w każdym kroku można było zmieniać. Co określoną ilość dodanych punktów sieć neuronowa była uczona nowych danych. Dane, na których uczyła się sieć znajdowały się w kolejce. Kiedy do kolejki wchodził nowy punkt, najstarszy zostawał z niej usuwany. Długość kolejki mogła być regulowana. Podczas ponownego uczenia sieci, zmianom podlegał parametr wygładzania. Algorytm wyznaczania tegoż parametru został dostarczony przez prowadzącego zajęcia. Podczas symulacji wykonywany był wykres jak w czasie zmienia się procent błędnie sklasyfikowanych punktów oraz mapa, gdzie te punkty się znajdowały. Wartość błędu była ułamkiem wyrażonym w procentach oznaczającym ilość błędnych klasyfikacji w obrębie całego okna na ilość dodanych nowych punktów, zatem wartość ta może przekroczyć 100 \%. 
+Liczbę punktów generowanych w każdym kroku można było zmieniać. Co określoną ilość dodanych punktów sieć neuronowa była uczona nowych danych. Podczas ponownego uczenia sieci, zmianom podlegał parametr wygładzania. Algorytm wyznaczania tegoż parametru został dostarczony przez prowadzącego zajęcia. Podczas symulacji wykonywany był wykres jak w czasie zmienia się procent błędnie sklasyfikowanych punktów oraz mapa, gdzie te punkty się znajdowały. Wartość błędu była ułamkiem wyrażonym w procentach oznaczającym ilość błędnych klasyfikacji w obrębie całego okna na ilość dodanych nowych punktów, zatem wartość ta może przekroczyć 100 \%. 
+
+\subsection{Metoda stałego okna}
+W metodzie kolejkowej dane, na których uczyła się sieć znajdowały się w kolejce. Kiedy do kolejki wchodził nowy punkt, najstarszy zostawał z niej usuwany. Długość kolejki mogła być regulowana. 
 
 Na początku przeprowadzono testy dla stałego parametru wygładzania (wartość spread) na zestawie pierwszym. Liczbę wszystkich generowanych punktów ustawiono na 9000. Rozmiar okna wynosił 200 punktów. Symulacje przeprowadzono dla spread równego 0,001; 0,01; 0,1; 1, 10 oraz 15. Dla każdego testu sporządzona został mapa z błędnymi punktami w ostatniej fazie, wykres zależności błędu od czasu oraz średnia wartość błędu. Wyniki przedstawia rysunek \ref{test_h} oraz tabela \ref{h_table}.
 
@@ -205,7 +208,7 @@ Parametry danych były jak w poprzednim przypadku. Rysunek \ref{test_h_auto} prz
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=15cm]{test_h_auto.png}
+\includegraphics[width=15cm]{test_h_auto_16_47.png}
 \caption{Symulacja dla spread liczonego automatycznie.}
 \label{poj}
 \end{figure}
@@ -279,14 +282,158 @@ spread & błąd \\
 \label{h_table2}
 \end{table}
 
+%%----------------------------METODA_PRIORYTETÓW
+\subsection{Metoda priorytetów}
+Analogiczne testy przeprowadzono dla metody priorytetowej. Polegała ona na tym, że punkty służące do uczenia sieci w kolejnych krokach były trzymane w buforze o stałej wielkości. Kiedy przychodził nowy punkt, liczony był jego priorytet na podstawie prawdopodobieństwa przynależności do danej klasy oraz jego wieku. Dla punktów w buforze aktualizowano wartość priorytetu, ponieważ punkty w buforze się starzały. Nowy punkt był dodawany do bufora. Następnie odbywało się sortowanie wg priorytetu i usuwany był punkt z najniższą jego wartością. 
+Dla obu zestawów przeprowadzono symulacje dla h równego 0,001, 0,01; 0,1; 1, 10 i 100. W drugim zestawie wprowadzono modyfikację polegającą na rozbiciu klasy stacjonarnej na dwie klasy (o centrach w pkt. (-2,0) i (2,0). Szerokość okna wynosiła 50. Wyniki dla zestawu pierwszego przedstawia rysunek \ref{test_h3} oraz tabela \ref{h_table3}.
 
+\begin{figure}[H]
+
+   \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test3_h0_001_50_00.png}
+    \caption{h = 0,001}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test3_h0_01_29_7.png}
+    \caption{h = 0,01}
+  \end{subfigure}
+  
+   \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test3_h0_1_18_5.png}
+    \caption{h = 0,1}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test3_h1_16_32.png}
+    \caption{h = 1}
+  \end{subfigure}
+  
+   \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test3_h10_16_52.png}
+    \caption{h = 10}
+  \end{subfigure}
+  \hfill
+    \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test3_h100_16_70.png}
+    \caption{h = 100}
+  \end{subfigure}
+  
+  
+  
+  \caption{Test zestawu 1 dla różnych h}
+  \label{test_h3}
+  
+\end{figure}
+
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+spread & błąd \\
+\hline
+0,001 & 50\%  \\
+\hline
+0,01 & 29\%  \\
+\hline
+0,1 & 18\%  \\
+\hline
+1 & 16\%  \\
+\hline
+10 & 17\%  \\
+\hline
+100 & 16\%  \\
+\hline
+\end{tabular}
+\caption{Zestawienie wyników testów dla stałych wartości spread dla zestawu 1.}
+\label{h_table3}
+\end{table}
+
+Wyniki dla zestawu drugiego przedstawia rysunek \ref{test_h4} oraz tabela \ref{h_table4}.
+
+\begin{figure}[H]
+
+   \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test4_h0_001_66_00.png}
+    \caption{h = 0,001}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test4_h0_01_40_42.png}
+    \caption{h = 0,01}
+  \end{subfigure}
+  
+   \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test4_h0_1_20_63.png}
+    \caption{h = 0,1}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test4_h1_15_66.png}
+    \caption{h = 1}
+  \end{subfigure}
+  
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test4_h10_16_60.png}
+    \caption{h = 10}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{test4_h100_16_60.png}
+    \caption{h = 100}
+  \end{subfigure}
+  
+  
+  \caption{Test zestawu 2 dla różnych h}
+  \label{test_h4}
+  
+\end{figure}
+
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+spread & błąd \\
+\hline
+0,001 & 66\%  \\
+\hline
+0,01 & 40\%  \\
+\hline
+0,1 & 20\%  \\
+\hline
+1 & 15\%  \\
+\hline
+10 & 17\%  \\
+\hline
+100 & 17\%  \\
+\hline
+\end{tabular}
+\caption{Zestawienie wyników testów dla stałych wartości spread dla zestawu 2.}
+\label{h_table4}
+\end{table}
 
 \section{Wnioski}
-Spoglądając na wyniki dla różnych wartości spread można zauważyć ciekawe zjawiska. Dla bardzo małej wartości błąd utrzymywał się na poziomie 50\%. Wynika to z faktu, że sieć rozpoznawała tylko punkty nauczone w poprzedniej iteracji, gdyż zasięg funkcji bazowej był praktycznie zerowy. W miarę zwiększania parametru wygładzania, błąd się zmniejszał, by osiągnąć minimalną wartość dla spread równego 1. Kiedy wartość była dalej zwiększana, błąd rósł, ponieważ zasięg funkcji bazowych był tak duży, że nawet punkty wyuczone w poprzedniej iteracji były błędnie klasyfikowane. W czasie trwania symulacji nie zauważono znaczącego wpływu przemieszczania się punktów drugiej klasy na błędne sklasyfikowane punkty. 
+Spoglądając na wyniki dla różnych wartości spread można zauważyć ciekawe zjawiska. Dla bardzo małej wartości błąd utrzymywał się na poziomie 50\%. Wynika to z faktu, że sieć rozpoznawała tylko punkty nauczone w poprzedniej iteracji, gdyż zasięg funkcji bazowej był praktycznie zerowy. W miarę zwiększania parametru wygładzania, błąd się zmniejszał, by osiągnąć minimalną wartość dla spread równego 1. Kiedy wartość była dalej zwiększana, błąd rósł, ale tylko dla metody oknowej, ponieważ zasięg funkcji bazowych był tak duży, że nawet punkty wyuczone w poprzedniej iteracji były błędnie klasyfikowane. W metodzie priorytetowej ustawienie wartości spread nawet na bardzo duże wartości nie powodowało znaczącego pogorszenia wyniku. Było to spowodowane faktem, że metoda ta opierała się na priorytetach, więc nawet dla dużych wartości parametru wygładzania punkty leżące bliżej skupiska danej klasy miały większy priorytet. W czasie trwania symulacji nie zauważono znaczącego wpływu przemieszczania się punktów drugiej klasy w pierwszym zestawie na błędne sklasyfikowane punkty. W drugim zestawie dla obydwu metod wyło widać wyraźny wzrost błędu w momencie, kiedy krążąca klasa przechodziła przez środek układu współrzędnych, gdzie "było" wąsko.  Należy przy tym zwrócić uwagę, że względny wzrost był dużo mniejszy przy metodzie priorytetowej. Działo się tak, ponieważ ta metoda wybierała tylko te punkty, co do których ma największą pewność -  punkty leżące w środkowej części klasy nie zmieszane z dwoma pozostałymi.  
 
-Symulacja z automatycznym liczeniem współczynnika wygładzania działa gorzej niż dla niektórych wartości ustawionych na sztywno. Powodem tego mogło być wadliwe działanie metody Q(0) dla wariantu PNNS. W pewnych warunkach algorytm tracił stabilność i sztucznie zawyżał wartości spread.  
+Symulacja z automatycznym liczeniem współczynnika wygładzania działa podobnie jak dla optymalnie wybranego parametru h. Współczynnik oscylował w okolicach wartości 1. 
 
-Podsumowując, wiele zależy od danych, które otrzymujemy. Jeśli obie klasy były by wystarczająco oddalone od siebie, poziom błędów byłby dużo mniejszy. Na stworzonym przykładzie poziom błędów nie zmieniał się znacznie w czasie, co dobrze świadczyło o adaptacji sieci neuronowe. W kwestii współczynnika spread można albo ustawić metodami prób i błędów wartość na sztywno i liczyć, że z czasem wartość tego parametru będzie nadal aktualna lub użyć funkcji obliczającej automatycznie ten parametr i mieć pewność, że jakość działania sieci będzie bardziej adaptatywna kosztem większego błędu. Wyniki przedstawia rysunek \ref{test_h2} oraz tabela \ref{h_table2}.
+Podsumowując, wiele zależy od danych, które otrzymujemy. Jeśli obie klasy były by wystarczająco oddalone od siebie, poziom błędów byłby dużo mniejszy. Na stworzonym przykładzie poziom błędów nie zmieniał się znacznie w czasie, co dobrze świadczyło o adaptacji sieci neuronowe. W kwestii współczynnika spread można albo ustawić metodami prób i błędów wartość na sztywno i liczyć, że z czasem wartość tego parametru będzie nadal aktualna lub użyć funkcji obliczającej automatycznie ten parametr i mieć pewność, że jakość działania sieci będzie bardziej adaptatywna. 
+
+\section{Kod}
+Plik \textbf{method1\_example1.m} generuje symulację dla metody kolejkowej i zestawu 1. \\
+Plik \textbf{method1\_example1\_dynamic\_spread.m} generuje symulację dla metody kolejkowej i zestawu 1 z automatycznym h. \\
+Plik \textbf{method1\_example2.m} generuje symulację dla metody kolejkowej i zestawu 2. \\
+Plik \textbf{method1\_example2\_dynamic\_spread.m} generuje symulację dla metody kolejkowej i zestawu 2 z automatycznym h. \\
+Plik \textbf{method2\_example1.m} generuje symulację dla metody priorytetowej i zestawu 1. \\
+Plik \textbf{method2\_example2.m} generuje symulację dla metody priorytetowej i zestawu 2. \\
+\\
+W metodzie priorytetowej współczynnik spread ustawia się w pliku \textbf{considerPoint.m} zmienną sigma
+
+
 
 
 \end{document}

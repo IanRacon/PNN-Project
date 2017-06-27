@@ -3,7 +3,7 @@ stepSize = 500;
 startTime = stepSize*2;
 windowSize = 75;
 maxTime = stepSize*2*9;
-spread = 1;
+spread = 20;
 
 globals;
 
